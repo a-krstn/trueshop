@@ -12,7 +12,7 @@ class ProductList(generic.ListView):
 
     template_name = 'shop/product/list.html'
     context_object_name = 'products'
-    paginate_by = 3
+    # paginate_by = 3
 
     def get_queryset(self):
         if self.kwargs.get('slug'):
@@ -24,11 +24,15 @@ class ProductList(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        category = None
         if self.kwargs.get('slug'):
             category = services.get_instance_by_unique_field(Category, slug=self.kwargs.get('slug'))
-            context['title'] = f'Категория: {category.cat_title}'
+            context['title'] = f'Категория: {category.name}'
+            context['category'] = category
             return context
-        context['title'] = 'Все продукты'
+        context['title'] = 'Все товары'
+        context['category'] = category
+        context['categories'] = services.all_objects(Category.objects)
         return context
 
 
