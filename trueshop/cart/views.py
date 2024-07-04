@@ -36,6 +36,10 @@ class CartRemoveView(View):
 
 
 class CartDetail(View):
+    """
+    Представление отображения корзины
+    """
+
     def get(self, request):
         cart = Cart(request)
         for item in cart:
@@ -45,4 +49,3 @@ class CartDetail(View):
         return render(request,
                       'cart/detail.html',
                       {'cart': cart})
-
