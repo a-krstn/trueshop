@@ -21,8 +21,8 @@ class Cart:
         Итерирование продуктов в корзине
         """
 
-        products_ids = self.cart.keys()
-        products = Product.objects.filter(id__in=products_ids)
+        product_ids = self.cart.keys()
+        products = Product.objects.filter(id__in=product_ids)
         cart = self.cart.copy()
         for product in products:
             cart[str(product.id)]['product'] = product
@@ -31,7 +31,7 @@ class Cart:
             item['total_price'] = item['price'] * item['quantity']
             yield item
 
-    def __len(self):
+    def __len__(self):
         """
         Подсчет количества товаров в корзине
         """
@@ -45,12 +45,12 @@ class Cart:
 
         product_id = str(product.id)
         if product_id not in self.cart:
-            self.cart['product_id'] = {'quantity': 0,
-                                       'price': product.price}
+            self.cart[product_id] = {'quantity': 0,
+                                     'price': str(product.price)}
         if override_quantity:
-            self.cart['product_id'] = quantity
+            self.cart[product_id]['quantity'] = quantity
         else:
-            self.cart['product_id'] += quantity
+            self.cart[product_id]['quantity'] += quantity
         self.save()
 
     def save(self):
