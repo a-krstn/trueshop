@@ -17,7 +17,6 @@ class ProductList(generic.ListView):
     # paginate_by = 3
 
     def get_queryset(self):
-        print(self.request.session.__dict__)
         if self.kwargs.get('category_slug'):
             return services.filter_objects(Product.objects,
                                            category__slug=self.kwargs.get('category_slug'),

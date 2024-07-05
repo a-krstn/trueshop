@@ -19,7 +19,7 @@
                             Товаров {{ total_items }},
                             ₽{{ cart.get_total_price }}
                         </a>
-                    {% else %}
+                    {% elif not order %}
                         Корзина пуста
                     {% endif %}
                 {% endwith %}
