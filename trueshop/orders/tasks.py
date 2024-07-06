@@ -12,10 +12,10 @@ def order_created(order_id):
     """
 
     order = Order.objects.get(id=order_id)
-    subject = f'Заказ №{order_id}'
+    subject = f'TrueShop Заказ №{order_id}'
     message = f'Уважаемый {order.first_name},\n\n' \
-              f'Ваш заказ успешно размещен.' \
-              f'ID Вашего заказа {order_id}.'
+              f'Ваш заказ успешно размещен. ' \
+              f'ID Вашего заказа - {order_id}.'
     mail_sent = send_mail(subject,
                           message,
                           'al-krstn@yandex.ru',

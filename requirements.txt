@@ -7,3 +7,4 @@ celery==5.4.0
 redis==5.0.7
 flower==2.0.1
 eventlet==0.36.1
+stripe==10.1.0
