@@ -54,6 +54,9 @@ class OrderItem(models.Model):
                                 verbose_name='Цена')
     quantity = models.PositiveIntegerField(default=1,
                                            verbose_name='Количество')
+    stripe_id = models.CharField(max_length=250,
+                                 blank=True,
+                                 verbose_name='ID платежа')
 
     def __str__(self):
         return str(self.pk)
