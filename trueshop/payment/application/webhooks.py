@@ -42,6 +42,7 @@ def stripe_webhook(request):
                 return HttpResponse(status=404)
             # пометка заказа оплаченным
             order.paid = True
+            order.stripe_id = session.payment_intent
             order.save()
 
     return HttpResponse(status=200)
