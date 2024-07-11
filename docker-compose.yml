@@ -1,0 +1,70 @@
+version: '3.7'
+
+services:
+  shop_db:
+    image: postgres:16.0
+    container_name: shop_postgres
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+
+  shop_cache:
+    image: redis:7.2.4
+    restart: always
+    volumes:
+      - ./data/cache:/data
+    ports:
+      - "6379:6379"
+
+  shop:
+    build: .
+    restart: always
+    volumes:
+      - static_volume:/shop/trueshop/static
+      - media_volume:/shop/trueshop/media
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - shop_db
+      - shop_cache
+
+  nginx:
+    image: nginx:1.25.0
+    restart: always
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/static
+      - media_volume:/media
+    ports:
+      - "80:80"
+    depends_on:
+      - shop
+
+  celery:
+    build: .
+    command: bash -c "cd trueshop && celery -A trueshop worker --loglevel=info"
+    volumes:
+      - .:/trueshop
+    depends_on:
+      - shop_db
+      - shop_cache
+    env_file:
+      - .env
+
+  flower:
+    image: mher/flower
+    ports:
+      - "5555:5555"
+    volumes:
+      - ./wait-for-broker.sh:/wait-for-broker.sh
+    command: [ "/wait-for-broker.sh" ]
+
+volumes:
+  static_volume:
+  media_volume:
